@@ -1,0 +1,7 @@
+.config/
+venv/
+.upm/
+/replit.nix
+/db.sqlite3
+__pycache__
+*.pyc
