@@ -41,6 +41,15 @@ query {
 
 
 def get_repositories(total):
+    '''
+    Get a list of repositories in JSON format from the GitHub
+    GraphQL API. The maximum number of repositories for a single request
+    is 100, so this function calls the API multiple times until the
+    desired total is reached.
+
+    Keyword Arguments:
+    total -- The total number of repositories to retrieve (Should be a multiple of 100)
+    '''
     repositories = []
     cursor = ''
 
@@ -56,6 +65,14 @@ def get_repositories(total):
 
 
 def update_database(repositories):
+    '''
+    Parse data from a list of repositories in JSON format and add the data
+    to the database. If the repository already existts, the data for it will
+    be updated. If it doesn't exist, a new one will be created.
+
+    Keyword Arguments:
+    repositories -- A list of repositories in JSON format
+    '''
     for repository in repositories:
 
         # Get repository information
