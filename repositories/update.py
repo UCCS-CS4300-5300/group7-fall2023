@@ -1,5 +1,6 @@
 import requests
 from repositories.models import Language, Repository
+from apscheduler.schedulers.background import BackgroundScheduler
 
 # Access token for GitHub API authorization
 ACCESS_TOKEN = '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'
@@ -64,15 +65,14 @@ def get_repositories(total):
     return repositories
 
 
-def update_database(repositories):
+def update():
     '''
     Parse data from a list of repositories in JSON format and add the data
     to the database. If the repository already existts, the data for it will
     be updated. If it doesn't exist, a new one will be created.
-
-    Keyword Arguments:
-    repositories -- A list of repositories in JSON format
     '''
+    repositories = get_repositories(10)
+
     for repository in repositories:
 
         # Get repository information
@@ -106,5 +106,10 @@ def update_database(repositories):
             url=url, defaults=defaults)
 
 
-repositories = get_repositories(10)
-update_database(repositories)
+def start():
+    '''
+    Schedule task to update repository database every 5 minutes.
+    '''
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(update, 'interval', minutes=5)
+    scheduler.start()
