@@ -10,7 +10,7 @@ class Language(models.Model):
 
 class Repository(models.Model):
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=350)
+    description = models.CharField(max_length=350, blank=True, null=True)
     url = models.URLField(unique=True)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
     stars = models.IntegerField()
