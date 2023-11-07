@@ -1,9 +1,13 @@
 import requests
 from repositories.models import Language, Repository
 from apscheduler.schedulers.background import BackgroundScheduler
+import time
+
+# Total Number of Repositories to store in database
+TOTAL_REPOSITORIES = 500
 
 # Access token for GitHub API authorization
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = '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'
 
 # URL for GitHub GraphQL API
 API_URL = 'https://api.github.com/graphql'
@@ -16,7 +20,7 @@ HEADERS = {
 # Query for api post request
 QUERY = '''
 query {
-  search(query: "stars:>1000 sort:stars", type: REPOSITORY, first:2, %s) {
+  search(query: "stars:>1000 sort:stars", type: REPOSITORY, first:100 %s) {
     repositories: edges {
       cursor
       info: node {
@@ -54,13 +58,16 @@ def get_repositories(total):
     repositories = []
     cursor = ''
 
-    for i in range(total // 2):
+    for i in range(total // 100):
         response = requests.post(API_URL,
                                  json={'query': QUERY % cursor},
                                  headers=HEADERS)
         results = response.json().get('data').get('search').get('repositories')
         cursor = f'after: \"{results[-1].get("cursor")}\"'
         repositories.extend(results)
+
+        # Avoid getting rate limited
+        time.sleep(3)
 
     return repositories
 
@@ -71,7 +78,7 @@ def update():
     to the database. If the repository already existts, the data for it will
     be updated. If it doesn't exist, a new one will be created.
     '''
-    repositories = get_repositories(10)
+    repositories = get_repositories(TOTAL_REPOSITORIES)
 
     for repository in repositories:
 
@@ -80,18 +87,18 @@ def update():
         name = info['name']
         description = info['description']
         url = info['url']
-        language = info['language']['name'] if info['language'] else "None"
+        language = info['language']['name'] if info['language'] else 'No Language'
         stars = info['stars']
         issues = info['issues']['count']
         forks = info['forks']
         last_commit = info['last_commit']
 
-        # Create or Update Language db instance
+        # Create or Update Language instance in database
         defaults = {'name': language}
         language, created = Language.objects.update_or_create(
             name=language, defaults=defaults)
 
-        # Create or Update Repository db instance
+        # Create or Update Repository instance in database
         defaults = {
             'name': name,
             'description': description,
@@ -108,8 +115,8 @@ def update():
 
 def start():
     '''
-    Schedule task to update repository database every 5 minutes.
+    Schedule task to update repository database every hour
     '''
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(update, 'interval', minutes=5)
+    scheduler = BackgroundScheduler({'apscheduler.timezone': 'UTC'})
+    scheduler.add_job(update, 'interval', hours=1)
     scheduler.start()
