@@ -7,7 +7,8 @@ import time
 TOTAL_REPOSITORIES = 500
 
 # Access token for GitHub API authorization
-ACCESS_TOKEN = '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'
+with open('token.txt') as token:
+    ACCESS_TOKEN = token.read()
 
 # URL for GitHub GraphQL API
 API_URL = 'https://api.github.com/graphql'
@@ -87,7 +88,8 @@ def update():
         name = info['name']
         description = info['description']
         url = info['url']
-        language = info['language']['name'] if info['language'] else 'No Language'
+        language = info['language']['name'] if info[
+            'language'] else 'No Language'
         stars = info['stars']
         issues = info['issues']['count']
         forks = info['forks']
