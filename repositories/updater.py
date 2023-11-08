@@ -7,7 +7,7 @@ import time
 TOTAL_REPOSITORIES = 500
 
 # Access token for GitHub API authorization
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = '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'
 
 # URL for GitHub GraphQL API
 API_URL = 'https://api.github.com/graphql'
