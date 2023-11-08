@@ -7,7 +7,7 @@ import time
 TOTAL_REPOSITORIES = 500
 
 # Access token for GitHub API authorization
-with open('token.txt') as token:
+with open('repositories/token.txt') as token:
     ACCESS_TOKEN = token.read()
 
 # URL for GitHub GraphQL API
