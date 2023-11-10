@@ -4,7 +4,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import time
 
 # Total Number of Repositories to store in database
-TOTAL_REPOSITORIES = 500
+TOTAL_REPOSITORIES = 1000
 
 # Access token for GitHub API authorization
 with open('repositories/token.txt') as token:
@@ -21,7 +21,7 @@ HEADERS = {
 # Query for api post request
 QUERY = '''
 query {
-  search(query: "stars:>1000 sort:stars", type: REPOSITORY, first:100 %s) {
+  search(query: "sort:stars", type: REPOSITORY, first:100 %s) {
     repositories: edges {
       cursor
       info: node {
@@ -68,7 +68,7 @@ def get_repositories(total):
         repositories.extend(results)
 
         # Avoid getting rate limited
-        time.sleep(3)
+        time.sleep(1)
 
     return repositories
 
