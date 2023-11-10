@@ -16,6 +16,9 @@
                 <p><b>Open Issues: </b>{{ repository.issues }}</p>
                 <p><b>Forks: </b>{{ repository.forks }}</p>
                 <p><b>Last Commit: </b>{{ repository.last_commit }}</p>
+                <a href="{{ repository.url }}" target="_blank">
+                  <button>View on GitHub</button>
+                </a>
               </div>
           {% endfor %}
       </div>
