@@ -17,15 +17,3 @@ class Repository(models.Model):
     issues = models.IntegerField()
     forks = models.IntegerField()
     last_commit = models.DateTimeField()
-
-    def __str__(self):
-        return f'''
-        Name: {self.name}
-        Description: {self.description}
-        URL: {self.url}
-        Language: {self.language}
-        Stars: {self.stars}
-        Issues: {self.issues}
-        Forks: {self.forks}
-        last_commit: {self.last_commit}
-        '''
