@@ -29,3 +29,13 @@ class ExplorePageView(TemplateView):
     context["repositories"] = Repository.objects.all().order_by(
       '-stars')[:10]
   return context
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+def login(request):
+  return render(request, 'login.html')
+
+@login required 
+def home(request):
+  return render(request, 'home.html')
