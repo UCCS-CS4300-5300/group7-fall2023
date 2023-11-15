@@ -1,5 +1,26 @@
-{% extends "base.html" %}
+    {% extends "base.html" %}
 
-{% block content %}
-  <h1>Explore page...</h1>
-{% endblock content %}
+    {% block content %}
+      <div class="container">
+          <div class="search-container">
+              <input type="text" class="search-input" placeholder="Search for a GitHub repository">
+              <button class="search-button">Search</button>
+          </div>
+          <div class="repository-list">
+              {% for repository in repositories %}
+                  <div class="repository">
+                    <div class="repository-title">{{ repository.name }}</div>
+                    <div class="repository-description"> {{ repository.description }}</div>
+                    <p><b>Language: </b>{{ repository.language }}</p>
+                    <p><b>Stars: </b>{{ repository.stars }}</p>
+                    <p><b>Open Issues: </b>{{ repository.issues }}</p>
+                    <p><b>Forks: </b>{{ repository.forks }}</p>
+                    <p><b>Last Commit: </b>{{ repository.last_commit }}</p>
+                    <a href="{{ repository.url }}" target="_blank">
+                      <button>View on GitHub</button>
+                    </a>
+                  </div>
+              {% endfor %}
+          </div>
+      </div>
+    {% endblock content %}

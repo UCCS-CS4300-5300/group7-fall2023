@@ -24,6 +24,8 @@ class AccountPageView(TemplateView):
 class ExplorePageView(TemplateView):
     template_name = "explore.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context["repositories"] = Repository.objects.all().order_by(
+      '-stars')[:10]
+  return context

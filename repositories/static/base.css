@@ -1,6 +1,6 @@
 body {
-    font-family: "Consolas", monospace;
-    background-color: #fff;
+    font-family: 'Alliance No.1', sans-serif;
+    background-color: #0c1117;
     margin: 0;
     padding: 0;
 }
@@ -50,16 +50,18 @@ body {
 }
 
 .search-container {
-    background-color: #fff;
+    background-color: #161b22;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .search-input {
-    width: 85%;
+    width: calc(50% - 10px);
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #333;
+    background-color: #000;
+    color: #fff;
     border-radius: 3px;
 }
 
@@ -77,12 +79,13 @@ body {
 }
 
 .repository-list {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .repository {
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: #161b22;
+    color: #fff;
+    border: none;
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
@@ -91,9 +94,17 @@ body {
 
 .repository-title {
     font-size: 18px;
+    color: #1e6eeb;
     font-weight: bold;
 }
 
 .repository-description {
     margin-top: 10px;
+    font-size: 15px;
+    color: #555;
+    white-space: pre-line;
+}
+
+.repository-stars {
+  
 }
