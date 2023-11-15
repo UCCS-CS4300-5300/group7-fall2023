@@ -21,7 +21,7 @@ HEADERS = {
 # Query for api post request
 QUERY = '''
 query {
-  search(query: "sort:stars", type: REPOSITORY, first:100 %s) {
+  search(query: "stars:>5000 sort:stars", type: REPOSITORY, first:100 %s) {
     repositories: edges {
       cursor
       info: node {
@@ -73,13 +73,13 @@ def get_repositories(total):
     return repositories
 
 
-def update():
+def update(total):
     '''
     Parse data from a list of repositories in JSON format and add the data
     to the database. If the repository already existts, the data for it will
     be updated. If it doesn't exist, a new one will be created.
     '''
-    repositories = get_repositories(TOTAL_REPOSITORIES)
+    repositories = get_repositories(total)
 
     for repository in repositories:
 
@@ -115,10 +115,10 @@ def update():
             url=url, defaults=defaults)
 
 
-def start():
+def start(total):
     '''
     Schedule task to update repository database every hour
     '''
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'UTC'})
-    scheduler.add_job(update, 'interval', hours=1)
+    scheduler.add_job(update, 'interval', args=(total,), hours=1)
     scheduler.start()
