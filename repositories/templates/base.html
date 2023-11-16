@@ -3,22 +3,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Popping Projects</title>
-  <link rel="stylesheet" href="{% static 'base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  
 </head>
-<body> 
-  <header class="header">
-      <div class="header-left">
-          <h1>Popping Projects</h1>
+<body class=> 
+
+  <div class="container-fluid min-vh-100 bg-black g-0 d-flex flex-column">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-2">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">Popping Projects</a>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link text-light" href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-light" href="{% url 'explore' %}">Explore</a></li>
+          <li class="nav-item"><a class="nav-link text-light" href="{% url 'account' %}">Account</a></li>
+        </ul>
       </div>
-      <div class="header-buttons">
-          <ul>
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li><a href="{% url 'explore' %}">Explore</a></li>
-              <li><a href="{% url 'account' %}">Account</a></li>
-          </ul>
-      </div>
-  </header>
-  {% block content %}{% endblock content %}
+    </nav>
+
+    {% block content %}{% endblock content %}
+    
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
