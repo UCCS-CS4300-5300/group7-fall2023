@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+
   <div class="container">
       <div class="search-container">
           <input type="text" class="search-input" placeholder="Search for a GitHub repository">
           <button class="search-button">Search</button>
       </div>
+    <h1 style = color:white>Explore page</h1>
       <div class="repository-list">
           {% for repository in repositories %}
               <div class="repository">
@@ -23,14 +25,14 @@
           {% endfor %}
       </div>
   </div>
-
+<!--
 <div class="w3-container w3-blue" style = background-color:black; >
   <h1 style = color:white>repo: Temp</h1>{{ repository.name }}
   <p style = color:white>Language: temp</p>
   <p style = color:white>Stars: temp</p>
   <p style = color:white>Language: temp</p>
 </div>
-
+//-->
 
 
 {% endblock content %}
