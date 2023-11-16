@@ -7,4 +7,4 @@ class RepositoriesConfig(AppConfig):
     # Schedule repository updater task when app is run
     def ready(self):
       from repositories import updater
-      updater.start()
+      updater.start(1000)

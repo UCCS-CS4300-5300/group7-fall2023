@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Popping Projects</title>
+  <link rel="stylesheet" href="{% static 'base.css' %}">
+</head>
+<body> 
+  <header class="header">
+      <div class="header-left">
+          <h1>Popping Projects</h1>
+      </div>
+      <div class="header-buttons">
+          <ul>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'explore' %}">Explore</a></li>
+              <li><a href="{% url 'account' %}">Account</a></li>
+          </ul>
+      </div>
+  </header>
+  {% block content %}{% endblock content %}
+</body>
+</html>
