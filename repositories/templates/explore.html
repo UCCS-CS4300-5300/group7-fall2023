@@ -30,7 +30,7 @@
               <label class="form-check-label text-light">{{ language.name }}</label>
             </div>
         {% endfor %}
-        <button class=" mt-3 btn btn-dark px-5">Filter</button>
+        <button class=" mt-3 btn btn-dark px-5" onclick = "filterclicked()">Filter</button>
       </div>
     </div>
   </div>
@@ -78,6 +78,11 @@
     
   </div>
 </div>
+<script>
+  function filterclicked() {
+    alert('Hello\nHow are you?')
+  }
+</script>
 
 
 {% endblock content %}
