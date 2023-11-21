@@ -26,8 +26,8 @@
       <div class="form-check">
         {% for language in languages %}
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="">
-              <label class="form-check-label text-light">{{ language.name }}</label>
+              <input class="form-check-input" type="checkbox" id="myCheck" onclick = "setlanguage()" value="" >
+              <label class="form-check-label text-light" id="text" onclick = "alert('you must have missed clicked')">{{ language.name }}</label>
             </div>
         {% endfor %}
         <button class=" mt-3 btn btn-dark px-5" onclick = "filterclicked()">Filter</button>
@@ -79,8 +79,29 @@
   </div>
 </div>
 <script>
+  //don't use ; when using the script stuff here
+  var langauages = {}
+  var langaugenum = 0;
+  function setlanguage(){
+   // langauages[langaugenum] = langauge;
+   // langaugenum = langaugenum + 1
+    var checkBox = document.getElementById("myCheck")
+    var text = document.getElementById("text").textContent
+    if (checkBox.checked == true){
+      alert('checked has been used')
+      langauages[langaugenum] = text
+      langaugenum = langaugenum + 1
+    }
+     //alert('checked has been used')
+  }
+  
   function filterclicked() {
-    alert('Hello\nHow are you?')
+    if(langauages[0] == null){
+      alert('nothing to filter')
+    }else{
+       alert(langauages)
+    }
+    
   }
 </script>
 
