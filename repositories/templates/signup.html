@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% block content %}
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -7,10 +6,11 @@
         {% endfor %}
     </ul>
 {% endif %}
+{% block content %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary me-3">Login</button>
+        <button type="submit" class="btn btn-success">Sign Up</button>
     </form>
-dont have an account ? <a href ="signup/">here</a>
+<p1> do you have an account login <a href="login/" >here </a> </p1>
 {% endblock content %}}
