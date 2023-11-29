@@ -1,17 +1,16 @@
-  from django.views.generic.base import TemplateView
-  from .models import Repository, Language, UserProfile
-  from django.views import View
-  from django.contrib.auth.decorators import login_required
-  from django.shortcuts import render, redirect,get_object_or_404
-  from django.contrib import messages
-  from .forms import UserUpdateForm, UserProfileUpdateForm, SignupForm, LoginForm,CreateProfileForm
-  from django.http import HttpResponseBadRequest
-  from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-  from django.contrib.auth.mixins import LoginRequiredMixin
-  from django.contrib.auth.models import User
+from django.views.generic.base import TemplateView
+from .models import Repository, Language, UserProfile
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect,get_object_or_404
+from django.contrib import messages
+from .forms import UserUpdateForm, UserProfileUpdateForm, SignupForm, LoginForm,CreateProfileForm
+from django.http import HttpResponseBadRequest
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 
-
-  class HomePageView(TemplateView):
+class HomePageView(TemplateView):
       template_name = "home.html"
 
       def get_context_data(self, **kwargs):
@@ -21,7 +20,7 @@
           return context
 
 
-  def login(request):
+def login(request):
       if request.method == 'POST':
           form = LoginForm(request.POST)
           if form.is_valid():
@@ -38,7 +37,7 @@
       return render(request, 'login.html', {'form': form})
 
 
-  def signup(request):
+def signup(request):
       if request.method == 'POST':
           form = SignupForm(request.POST)
           if form.is_valid():
@@ -52,18 +51,18 @@
       return render(request, 'signup.html', {'form': form})
 
 
-  @login_required
-  def logout(request):
+@login_required
+def logout(request):
       auth_logout(request)
       messages.success(request, 'You have been logged out.')
       return redirect('home')
 
 
-  def custom_400_error(request, exception=None):
+def custom_400_error(request, exception=None):
       return HttpResponseBadRequest(render(request, '400.html'), status=400)
 
 
-  class AccountPageView(LoginRequiredMixin, TemplateView):
+class AccountPageView(LoginRequiredMixin, TemplateView):
       template_name = "account.html"
       login_url = '/login/'
 
@@ -131,7 +130,7 @@
           return response
 
 
-  class ExplorePageView(TemplateView):
+class ExplorePageView(TemplateView):
       template_name = "explore.html"
 
       def get_context_data(self, **kwargs):
@@ -149,7 +148,7 @@
 
 
 
-  class CreateProfile(View):
+class CreateProfile(View):
       template_name = 'create_profile.html'
 
       def get(self, request):
@@ -170,6 +169,6 @@
               return redirect('home')  # Redirect to home 
           return render(request, self.template_name, {'form': form})
 
-  @login_required
-  def home(request):
+@login_required
+def home(request):
       return render(request, 'home.html')
