@@ -10,15 +10,11 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
-class HomePageView(TemplateView):
-      template_name = "home.html"
-
-      def get_context_data(self, **kwargs):
-          context = super().get_context_data(**kwargs)
-          context["repositories"] = Repository.objects.all().order_by(
-              '-stars')[:10]
-          return context
-
+def home(request):
+  context = {
+    'repositories': Repository.objects.all().order_by('-stars')[:10]
+  }
+  return render(request, 'home.html', context=context)
 
 def login(request):
       if request.method == 'POST':
@@ -168,7 +164,3 @@ class CreateProfile(View):
               profile.save()
               return redirect('home')  # Redirect to home 
           return render(request, self.template_name, {'form': form})
-
-@login_required
-def home(request):
-      return render(request, 'home.html')
