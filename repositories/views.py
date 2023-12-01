@@ -2,19 +2,46 @@ from django.views.generic.base import TemplateView
 from .models import Repository, Language, UserProfile
 from django.views import View
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect,get_object_or_404, reverse
 from django.contrib import messages
-from .forms import UserUpdateForm, UserProfileUpdateForm, SignupForm, LoginForm,CreateProfileForm
+from .forms import UserUpdateForm, UserProfileUpdateForm, SignupForm, LoginForm,CreateProfileForm, SearchForm
 from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
 def home(request):
+  if request.method == 'POST':
+    search_form = SearchForm(request.POST)
+    if search_form.is_valid():
+      query = search_form.cleaned_data['query']
+      parameter = f'?query={query}' if query else ''
+      return redirect(reverse('explore') + parameter) 
+  else:
+    search_form = SearchForm()
   context = {
-    'repositories': Repository.objects.all().order_by('-stars')[:10]
+    'repositories': Repository.objects.all().order_by('-stars')[:10],
+    'search_form': search_form
   }
   return render(request, 'home.html', context=context)
+
+
+def explore(request):
+  if request.method == 'POST':
+    search_form = SearchForm(request.POST)
+    if search_form.is_valid():
+      query = search_form.cleaned_data['query']
+      parameter = f'?query={query}' if query else ''
+      return redirect(reverse('explore') + parameter) 
+  else:
+    search_form = SearchForm()
+  context = {
+    'repositories': Repository.objects.all().order_by('-stars')[:10],
+    'languages': Language.objects.all(),
+    'search_form': search_form
+  }
+  return render(request, 'explore.html', context=context)
+    
 
 def login(request):
       if request.method == 'POST':
@@ -124,25 +151,6 @@ class AccountPageView(LoginRequiredMixin, TemplateView):
           if response.status_code == 400:
               return HttpResponseBadRequest(render(self.request, '400.html'))
           return response
-
-
-class ExplorePageView(TemplateView):
-      template_name = "explore.html"
-
-      def get_context_data(self, **kwargs):
-          context = super().get_context_data(**kwargs)
-          context["repositories"] = Repository.objects.all().order_by(
-              '-last_commit')[:10]
-          context["languages"] = Language.objects.all()
-          return context
-
-
-  # def login(request):
-  #     return render(request, 'login.html')
-
-
-
-
 
 class CreateProfile(View):
       template_name = 'create_profile.html'

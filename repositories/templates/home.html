@@ -3,8 +3,11 @@
 {% block content %}
   <div class="container">
       <div class="search-container">
-          <input type="text" class="search-input" placeholder="Search for a GitHub repository">
-          <button class="search-button">Search</button>
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ search_form }}
+          <input type="submit" value="Search">
+        </form>
       </div>
       <div class="repository-list">
           {% for repository in repositories %}

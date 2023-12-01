@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 
 class SearchForm(forms.Form):
-  query = forms.CharField(max_length=100)
+  query = forms.CharField(max_length=100, label='', required=False)
   
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True,

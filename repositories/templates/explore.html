@@ -5,12 +5,11 @@
 
 <div class="row g-0 border-bottom border-light border-2">
   <div class="col-12 bg-black p-4">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Search For a Repository">
-      <div class="input-group-append">
-        <button class="btn btn-light ms-2" type="button">Search</button>
-      </div>
-    </div>
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ search_form }}
+      <input type="submit" value="Search">
+    </form>
   </div>
 </div>
 
