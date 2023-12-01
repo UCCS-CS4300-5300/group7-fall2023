@@ -8,7 +8,7 @@ class SearchForm(forms.Form):
 
 class SortForm(forms.Form):
   sort_by = forms.ChoiceField(choices=(
-    ('stars', 'Stars'),
+    ('stars', 'Stars (Default)'),
     ('forks', 'Forks'),
     ('issues', 'Open Issues'),
     ('last_commit', 'Last Commit'),

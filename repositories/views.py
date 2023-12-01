@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect,get_object_or_404, reverse
 from django.contrib import messages
 from .forms import UserUpdateForm, UserProfileUpdateForm, SignupForm, LoginForm,CreateProfileForm, SearchForm, SortForm
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, QueryDict
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -27,35 +27,41 @@ def home(request):
  
   
 def explore(request):
-  if request.method == 'POST':
 
+  # Store query parameters for redirects
+  qdict = QueryDict('',mutable=True)
+  qdict = request.GET.copy()
+  
+  if request.method == 'POST':
+    
     # Search Form handler
     if 'search' in request.POST:
       search_form = SearchForm(request.POST, prefix='search')
       if search_form.is_valid():
         query = search_form.cleaned_data['query']
-        parameter = f'?query={query}' if query else ''
-        return redirect(reverse('explore') + parameter)
+        qdict['query'] = query
+        return redirect(reverse('explore') + '?' + qdict.urlencode())
 
     # Sort Form handler
     if 'sort' in request.POST:
       sort_form = SortForm(request.POST, prefix='sort')
       if sort_form.is_valid():
         sort_by = sort_form.cleaned_data['sort_by']
-        return redirect(reverse('explore') + f'?sort_by={sort_by}')
+        qdict['sort_by'] = sort_by
+        return redirect(reverse('explore') + '?' + qdict.urlencode())
         
   else:
     repositories = Repository.objects.all()
-    search_form = SearchForm(prefix='search')
-    sort_form = SortForm(prefix='sort')
     query = request.GET.get('query')
     sort_by = request.GET.get('sort_by') or 'stars'
 
     if query:
       repositories = repositories.filter(name__icontains=query)
-
     if sort_by:
       repositories = repositories.order_by(f'-{sort_by}')
+
+    search_form = SearchForm(prefix='search', initial={'query': query})
+    sort_form = SortForm(prefix='sort', initial={'sort_by': sort_by})
 
       
   context = {
