@@ -5,6 +5,14 @@ from .models import UserProfile
 
 class SearchForm(forms.Form):
   query = forms.CharField(max_length=100, label='', required=False)
+
+class SortForm(forms.Form):
+  sort = forms.ChoiceField(choices=(
+    ('Stars', '-stars'),
+    ('Forks', '-forks'),
+    ('Open Issues', '-issues'),
+    ('Last Commit', '-last_commit')
+  ))
   
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True,
