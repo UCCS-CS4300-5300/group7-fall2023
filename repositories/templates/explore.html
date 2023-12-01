@@ -8,7 +8,7 @@
     <form action="" method="post">
       {% csrf_token %}
       {{ search_form }}
-      <input type="submit" value="Search">
+      <input type="submit" name="search" value="Search">
     </form>
   </div>
 </div>
@@ -46,12 +46,11 @@
       </div>
 
       <div class="col-2 p-2">
-        <select class="form-select float-end" aria-label="Default select example">
-          <option selected>Sort By</option>
-          <option value="">Popularity</option>
-          <option value="">Forks</option>
-          <option value="">Last Commit</option>
-        </select>
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ sort_form }}
+          <input type="submit" name="sort" value="Sort">
+        </form>
       </div>
 
    

@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect,get_object_or_404, reverse
 from django.contrib import messages
-from .forms import UserUpdateForm, UserProfileUpdateForm, SignupForm, LoginForm,CreateProfileForm, SearchForm
+from .forms import UserUpdateForm, UserProfileUpdateForm, SignupForm, LoginForm,CreateProfileForm, SearchForm, SortForm
 from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,23 +28,41 @@ def home(request):
   
 def explore(request):
   if request.method == 'POST':
-    search_form = SearchForm(request.POST)
-    if search_form.is_valid():
-      query = search_form.cleaned_data['query']
-      parameter = f'?query={query}' if query else ''
-      return redirect(reverse('explore') + parameter) 
+
+    # Search Form handler
+    if 'search' in request.POST:
+      search_form = SearchForm(request.POST, prefix='search')
+      if search_form.is_valid():
+        query = search_form.cleaned_data['query']
+        parameter = f'?query={query}' if query else ''
+        return redirect(reverse('explore') + parameter)
+
+    # Sort Form handler
+    if 'sort' in request.POST:
+      sort_form = SortForm(request.POST, prefix='sort')
+      if sort_form.is_valid():
+        sort_by = sort_form.cleaned_data['sort_by']
+        return redirect(reverse('explore') + f'?sort_by={sort_by}')
+        
   else:
     repositories = Repository.objects.all()
-    search_form = SearchForm()
+    search_form = SearchForm(prefix='search')
+    sort_form = SortForm(prefix='sort')
     query = request.GET.get('query')
-    
+    sort_by = request.GET.get('sort_by') or 'stars'
+
     if query:
       repositories = repositories.filter(name__icontains=query)
+
+    if sort_by:
+      repositories = repositories.order_by(f'-{sort_by}')
+
       
   context = {
-    'repositories': repositories.order_by('-stars')[:10],
+    'repositories': repositories[:10],
     'languages': Language.objects.all(),
-    'search_form': search_form
+    'search_form': search_form,
+    'sort_form': sort_form
   }
   return render(request, 'explore.html', context=context)
     
