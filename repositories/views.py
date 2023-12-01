@@ -24,8 +24,8 @@ def home(request):
     'search_form': search_form
   }
   return render(request, 'home.html', context=context)
-
-
+ 
+  
 def explore(request):
   if request.method == 'POST':
     search_form = SearchForm(request.POST)
@@ -34,9 +34,15 @@ def explore(request):
       parameter = f'?query={query}' if query else ''
       return redirect(reverse('explore') + parameter) 
   else:
+    repositories = Repository.objects.all()
     search_form = SearchForm()
+    query = request.GET.get('query')
+    
+    if query:
+      repositories = repositories.filter(name__icontains=query)
+      
   context = {
-    'repositories': Repository.objects.all().order_by('-stars')[:10],
+    'repositories': repositories.order_by('-stars')[:10],
     'languages': Language.objects.all(),
     'search_form': search_form
   }
