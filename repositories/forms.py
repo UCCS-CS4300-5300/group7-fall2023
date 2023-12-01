@@ -3,6 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 
+class SearchForm(forms.Form):
+  query = forms.CharField(max_length=100)
+  
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True,
                              widget=forms.EmailInput(attrs={
