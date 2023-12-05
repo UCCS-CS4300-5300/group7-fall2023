@@ -73,14 +73,13 @@ def get_repositories(total):
     return repositories
 
 
-def update(total, selected_languages=None):
+def update(total):
     '''
     Parse data from a list of repositories in JSON format and add the data
     to the database. If the repository already existts, the data for it will
     be updated. If it doesn't exist, a new one will be created.
     Keyword Arguments:
     total -- The total number of repositories to retrieve (Should be a multiple of 100)
-    selected_languages -- List of selected programming languages for filtering
     '''
     repositories = get_repositories(total)
 
@@ -93,9 +92,6 @@ def update(total, selected_languages=None):
         url = info['url']
         language = info['language']['name'] if info[
             'language'] else 'No Language'
-        # Skip repository if not in selected languages
-        if selected_languages and language not in selected_languages:
-            continue
         stars = info['stars']
         issues = info['issues']['count']
         forks = info['forks']
