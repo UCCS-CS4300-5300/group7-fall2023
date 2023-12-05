@@ -53,13 +53,13 @@
             <div class="row g-0 flex-grow-1 p-3">
                 {% for repository in repositories %}
                     <div class="repository border border-light p-3">
-                        <div class="repository-title">{{ repository.name }}</div>
-                        <div class="repository-description">{{ repository.description }}</div>
-                        <p><b>Language: </b>{{ repository.language }}</p>
-                        <p><b>Stars: </b>{{ repository.stars }}</p>
-                        <p><b>Open Issues: </b>{{ repository.issues }}</p>
-                        <p><b>Forks: </b>{{ repository.forks }}</p>
-                        <p><b>Last Commit: </b>{{ repository.last_commit }}</p>
+                        <div class="repository-title text-warning">{{ repository.name }}</div>
+                        <div class="repository-description text-primary">{{ repository.description }}</div>
+                        <p style = "color:gold"><b>Language: </b>{{ repository.language }}</p>
+                        <p style = "color:blue"><b>Stars: </b>{{ repository.stars }}</p>
+                        <p style = "color:gold"><b>Open Issues: </b>{{ repository.issues }}</p>
+                        <p style = "color:blue"><b>Forks: </b>{{ repository.forks }}</p>
+                        <p style = "color:gold"><b>Last Commit: </b>{{ repository.last_commit }}</p>
                         <a href="{{ repository.url }}" target="_blank">
                             <button>View on GitHub</button>
                         </a>
