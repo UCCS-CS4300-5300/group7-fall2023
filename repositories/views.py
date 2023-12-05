@@ -9,6 +9,7 @@ from django.http import HttpResponseBadRequest, QueryDict
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 def home(request):
   if request.method == 'POST':
@@ -24,16 +25,16 @@ def home(request):
     'search_form': search_form
   }
   return render(request, 'home.html', context=context)
- 
-  
+
+
 def explore(request):
 
   # Store query parameters for redirects
   qdict = QueryDict('',mutable=True)
   qdict = request.GET.copy()
-  
+
   if request.method == 'POST':
-    
+
     # Search Form handler
     if 'search' in request.POST:
       search_form = SearchForm(request.POST, prefix='search')
@@ -49,29 +50,44 @@ def explore(request):
         sort_by = sort_form.cleaned_data['sort_by']
         qdict['sort_by'] = sort_by
         return redirect(reverse('explore') + '?' + qdict.urlencode())
-        
+
+    # Language Filter Form handler
+      if 'filter' in request.POST:
+        selected_languages = request.POST.getlist('languages')
+        qdict.setlist('languages', selected_languages)
+        return redirect(reverse('explore') + '?' + qdict.urlencode())
+
   else:
-    repositories = Repository.objects.all()
-    query = request.GET.get('query')
-    sort_by = request.GET.get('sort_by') or 'stars'
+      repositories = Repository.objects.all()
+      query = request.GET.get('query')
+      sort_by = request.GET.get('sort_by') or 'stars'
+      selected_languages = request.GET.getlist('languages')
 
-    if query:
-      repositories = repositories.filter(name__icontains=query)
-    if sort_by:
-      repositories = repositories.order_by(f'-{sort_by}')
+      if query:
+          repositories = repositories.filter(name__icontains=query)
+      if selected_languages:
+          q_objects = Q()
+          for language in selected_languages:
+              q_objects |= Q(language__name=language)
+          repositories = repositories.filter(q_objects)
 
-    search_form = SearchForm(prefix='search', initial={'query': query})
-    sort_form = SortForm(prefix='sort', initial={'sort_by': sort_by})
+      if sort_by:
+          repositories = repositories.order_by(f'-{sort_by}')
 
-      
+      search_form = SearchForm(prefix='search', initial={'query': query})
+      sort_form = SortForm(prefix='sort', initial={'sort_by': sort_by})
+      language_filter_form = SortForm(prefix='filter', initial={'languages': selected_languages})
+
   context = {
-    'repositories': repositories[:10],
-    'languages': Language.objects.all(),
-    'search_form': search_form,
-    'sort_form': sort_form
+      'repositories': repositories[:10],
+      'languages': Language.objects.all(),
+      'search_form': search_form,
+      'sort_form': sort_form,
+      'language_filter_form': language_filter_form,
+      'selected_languages': selected_languages,
   }
   return render(request, 'explore.html', context=context)
-    
+
 
 def login(request):
       if request.method == 'POST':
