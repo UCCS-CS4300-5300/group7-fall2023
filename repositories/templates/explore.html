@@ -1,38 +1,113 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container mt-4">
+    <div class="row g-0 border-bottom border-light border-2">
+      <div class="col-12 bg-light p-4">
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ search_form }}
+          <input type="submit" name="search" value="Search">
+        </form>
+      </div>
+    </div>
+    <div class="row g-0 flex-grow-1">
+        <div class="col-2 d-flex flex-column border-end border-light border-2">
+            <div class="row g-0 bg-light p-3">
+                <h5 class="text-center text-dark">Filters</h5>
+            </div>
 
-  <div class="container">
-      <div class="search-container">
-          <input type="text" class="search-input" placeholder="Search for a GitHub repository">
-          <button class="search-button">Search</button>
-      </div>
-    <h1 style = color:white>Explore page</h1>
-      <div class="repository-list">
-          {% for repository in repositories %}
-              <div class="repository">
-                <div class="repository-title">{{ repository.name }}</div>
-                <div class="repository-description"> {{ repository.description }}</div>
-                <p><b>Language: </b>{{ repository.language }}</p>
-                <p><b>Stars: </b>{{ repository.stars }}</p>
-                <p><b>Open Issues: </b>{{ repository.issues }}</p>
-                <p><b>Forks: </b>{{ repository.forks }}</p>
-                <p><b>Last Commit: </b>{{ repository.last_commit }}</p>
-                <a href="{{ repository.url }}" target="_blank">
-                  <button>View on GitHub</button>
-                </a>
-              </div>
-          {% endfor %}
-      </div>
-  </div>
-<!--
-<div class="w3-container w3-blue" style = background-color:black; >
-  <h1 style = color:white>repo: Temp</h1>{{ repository.name }}
-  <p style = color:white>Language: temp</p>
-  <p style = color:white>Stars: temp</p>
-  <p style = color:white>Language: temp</p>
+            <div class="row g-0 bg-light flex-grow-1 p-3">
+                <div class="form-check">
+                    {% for language in languages %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="languages" id="language-{{ language.name }}" value="{{ language.name }}" {% if language.name in selected_languages %}checked{% endif %}>
+                            <label class="form-check-label text-dark" for="language-{{ language.name }}">{{ language.name }}</label>
+                        </div>
+                    {% endfor %}
+                    <button class="mt-3 btn btn-dark px-5" onclick="applyFilters()">Apply Filters</button>
+                    <button class="mt-3 btn btn-danger px-5" onclick="clearFilters()">Clear Filters</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-10 d-flex flex-column bg-light">
+            <div class="row g-0 bg-light">
+                <div class="col-10 p-2">
+                    <button class="btn btn-dark p-2 px-3">1</button>
+                    <button class="btn btn-dark p-2 px-3">2</button>
+                    <button class="btn btn-dark p-2 px-3">3</button>
+                    <span class="text-dark">...</span>
+                    <button class="btn btn-dark p-2 px-3">10</button>
+                </div>
+
+                <div class="col-2 p-2">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{ sort_form }}
+                        <input type="submit" name="sort" value="Sort">
+                    </form>
+                </div>
+            </div>
+
+            <div class="row g-0 flex-grow-1 p-3">
+                {% for repository in repositories %}
+                    <div class="repository border border-light p-3">
+                        <div class="repository-title text-warning">{{ repository.name }}</div>
+                        <div class="repository-description text-primary">{{ repository.description }}</div>
+                        <p class="text-light"><b>Language: </b>{{ repository.language }}</p>
+                        <p class="text-light"><b>Stars: </b>{{ repository.stars }}</p>
+                        <p class="text-light"><b>Open Issues: </b>{{ repository.issues }}</p>
+                        <p class="text-light"><b>Forks: </b>{{ repository.forks }}</p>
+                        <p class="text-light"><b>Last Commit: </b>{{ repository.last_commit }}</p>
+                        <a href="{{ repository.url }}" target="_blank">
+                            <button class="btn btn-light">View on GitHub</button>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
-//-->
 
+<script>
+    function applyFilters() {
+        var selectedLanguages = getSelectedLanguages();
+        var baseUrl = window.location.href.split('?')[0];
+        var queryParams = buildQueryParams(selectedLanguages);
+        var newUrl = baseUrl + (queryParams ? '?' + queryParams : '');
+
+        // Navigate to the new URL
+        window.location.href = newUrl;
+    }
+
+    function clearFilters() {
+        // Clear all selected checkboxes
+        var checkboxes = document.querySelectorAll('input[name="languages"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+
+        // Navigate to the base URL
+        window.location.href = window.location.href.split('?')[0];
+    }
+
+    function getSelectedLanguages() {
+        var selectedCheckboxes = document.querySelectorAll('input[name="languages"]:checked');
+        var selectedCheckboxValues = Array.from(selectedCheckboxes).map(function (checkbox) {
+            return checkbox.value;
+        });
+
+        return selectedCheckboxValues;
+    }
+
+    function buildQueryParams(selectedLanguages) {
+        var params = new URLSearchParams();
+        selectedLanguages.forEach(function (value) {
+            params.append('languages', value);
+        });
+        return params.toString();
+    }
+</script>
 
 {% endblock content %}

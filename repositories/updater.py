@@ -78,6 +78,8 @@ def update(total):
     Parse data from a list of repositories in JSON format and add the data
     to the database. If the repository already existts, the data for it will
     be updated. If it doesn't exist, a new one will be created.
+    Keyword Arguments:
+    total -- The total number of repositories to retrieve (Should be a multiple of 100)
     '''
     repositories = get_repositories(total)
 

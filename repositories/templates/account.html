@@ -1,10 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="text-container">
-    <input type="text" class="search-input" placeholder="Username">
-    <input type="text" class="search-input" placeholder="Password">
-    <button class="Signin">Sign In</button>
-    <button class="Signin">Forgot Username/Password</button>
-</div>
-{% endblock content %}
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+    <h1>Account Management</h1>
+    <div class="d-flex justify-content-center align-items-center flex-column pt-3">
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ user_form.as_p }}
+          {{ profile_form.as_p }}
+          <button type="submit">Update</button>
+      </form>
+    </div>
+{% endblock %}

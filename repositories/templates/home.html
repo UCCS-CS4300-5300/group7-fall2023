@@ -2,22 +2,25 @@
 
 {% block content %}
   <div class="container">
-      <div class="search-container">
-          <input type="text" class="search-input" placeholder="Search for a GitHub repository">
-          <button class="search-button">Search</button>
+      <div class="search-container bg-light">
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ search_form }}
+          <input type="submit" value="Search">
+        </form>
       </div>
       <div class="repository-list">
           {% for repository in repositories %}
               <div class="repository">
-                <div class="repository-title">{{ repository.name }}</div>
-                <div class="repository-description"> {{ repository.description }}</div>
-                <p><b>Language: </b>{{ repository.language }}</p>
-                <p><b>Stars: </b>{{ repository.stars }}</p>
-                <p><b>Open Issues: </b>{{ repository.issues }}</p>
-                <p><b>Forks: </b>{{ repository.forks }}</p>
-                <p><b>Last Commit: </b>{{ repository.last_commit }}</p>
+                <div class="repository-title text-warning" >{{ repository.name }}</div>
+                <div class="repository-description text-primary"> {{ repository.description }}</div>
+                <p class="text-light"><b>Language: </b>{{ repository.language }}</p>
+                <p class="text-light"><b>Stars: </b>{{ repository.stars }}</p>
+                <p class="text-light"><b>Open Issues: </b>{{ repository.issues }}</p>
+                <p class="text-light"><b>Forks: </b>{{ repository.forks }}</p>
+                <p class="text-light"><b>Last Commit: </b>{{ repository.last_commit }}</p>
                 <a href="{{ repository.url }}" target="_blank">
-                  <button>View on GitHub</button>
+                  <button class="btn btn-light">View on GitHub</button>
                 </a>
               </div>
           {% endfor %}
