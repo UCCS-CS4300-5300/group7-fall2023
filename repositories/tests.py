@@ -35,12 +35,11 @@ class ViewTests(TestCase):
   def test_explore(self):
     response = self.client.get(reverse('explore'))
     self.assertEqual(response.status_code, 200)
-
+  
   def test_account(self):
     response = self.client.get(reverse('account'))
-    self.assertEqual(response.status_code, 200)
+    self.assertRedirects(response, '/login/?next=/account/', status_code=302)
     
-
 class UpdaterTests(TestCase):
     def test_get_repositories(self):
         total = 100

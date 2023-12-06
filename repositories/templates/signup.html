@@ -1,16 +1,22 @@
 {% extends "base.html" %}
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Sign Up</button>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div class="d-flex justify-content-center align-items-center flex-column pt-3">
+    <form method="post" class="text-center">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success mt-0">Sign Up</button>
     </form>
-<p1> do you have an account login <a href="/login/" >here </a> </p1>
-{% endblock content %}}
+
+    <p class="mt-0">Already have an account? <a href="/login/">Login here</a></p>
+  </div>
+{% endblock content %}
+
